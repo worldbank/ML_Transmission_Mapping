@@ -1,0 +1,37 @@
+version: '3.3'
+networks:
+  neo-db:
+
+services:
+
+    powertower:
+      image: postgis/postgis:13-3.0
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=powertower
+        - POSTGRES_PASSWORD=postgres
+        - PGDATA=/var/lib/postgresql/data/pgdata
+      ports:
+        - 5432:5432
+      volumes:
+        - /home/ubuntu/data:/root/efs
+        - /home/ubuntu/data/var/run/docker.sock:/var/run/docker.sock
+        - /home/ubuntu/data/database/data:/var/lib/postgresql/data/pgdata
+        - /home/ubuntu/data/database/logs:/var/lib/postgresql/data/log
+      command: >
+       postgres
+         -c listen_addresses=*
+         -c logging_collector=on
+         -c log_destination=stderr
+         -c max_connections=2000
+      networks:
+        - neo-db
+
+volumes:
+  data:
+
+
+        
+
+
